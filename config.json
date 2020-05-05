@@ -1,0 +1,23 @@
+{
+    "zapLog": {
+        "console": {
+            "enable": true
+        },
+        "postgres": {
+            "enable": false,
+            "host": "iron5.xyz",
+            "port": "8081",
+            "user": "postgres",
+            "password": "",
+            "sslmode": "require",
+            "dbname": "log",
+            "schemas": "log",
+            "tablename": "t_log"
+        },
+        "file": {
+            "enable": true,
+            "?relPath": "相对于可执行程序路径",
+            "relPath": "/logs/log.log"
+        }
+    }
+}
