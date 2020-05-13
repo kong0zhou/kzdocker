@@ -11,9 +11,9 @@ import (
 // RunContainerInitProcess 新进程创建出来之后对新进程进行初始化
 func RunContainerInitProcess(command []string, args []string) error {
 	fmt.Printf("command %v\n", command)
-	/*
-		syscall.Mount("", "/", "", uintptr(syscall.MS_PRIVATE|syscall.MS_REC), "")
 
+	syscall.Mount("", "/", "", uintptr(syscall.MS_PRIVATE|syscall.MS_REC), "")
+	/*
 
 			为什么要在容器中挂载/proc呢， 主要原因是因为ps、top等命令依赖于/proc目录。
 			当隔离PID的时候，ps、top等命令还是未隔离的时候一样输出。 为了让隔离空间ps、top等命令只输出当前隔离空间的进程信息。需要单独挂载/proc目录。
@@ -49,7 +49,7 @@ func setUpMount() {
 		// return
 	}
 	fmt.Println("setUpMount() Current location is ", pwd)
-	err = pivotRoot(pwd)
+	err = pivotRoot(filepath.Join(pwd, "alpine"))
 	if err != nil {
 		panic("setUpMount()  error " + err.Error())
 		// return
