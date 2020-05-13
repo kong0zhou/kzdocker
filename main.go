@@ -10,18 +10,24 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// sudo ./main run -it -m 100m -cpuset 1 -cpushare 512 ls -a
+
 func init() {
-	// fmt.Println(os.Args[0])
+	fmt.Println(os.Args[0])
 	if os.Args[0] == `/proc/self/exe` {
 		fmt.Println(os.Args[1])
-		err := container.RunContainerInitProcess(os.Args[1], nil)
+		// os.Args[1]=
+		err := container.RunContainerInitProcess(os.Args[1:], nil)
 		if err != nil {
-			log.Panic(err.Error())
+			// log.Panic(err.Error())
+			panic(`RunContainerInitProcess :` + err.Error())
+			// return
 		}
 	}
 }
 
 func main() {
+	// initP()
 	base.InitBase()
 	log.InitLog()
 
