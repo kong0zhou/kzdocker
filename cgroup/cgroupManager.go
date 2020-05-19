@@ -16,16 +16,16 @@ func NewCGroupManager(path string, res *ResourceConfig) *CGroupManager {
 		path:     path,
 		resource: res,
 		subsystemsIns: []Subsystem{
-			NewMemorySubsystem(),
-			NewCPUSubsystem(),
-			NewCPUSetSubsystem(),
+			NewMemorySubsystem(res),
+			NewCPUSubsystem(res),
+			NewCPUSetSubsystem(res),
 		},
 	}
 }
 
 func (c *CGroupManager) Set() (err error) {
 	for _, subSysIns := range c.subsystemsIns {
-		err = subSysIns.Set(c.path, c.resource)
+		err = subSysIns.Set(c.path)
 		if err != nil {
 			return err
 		}

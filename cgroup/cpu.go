@@ -10,11 +10,13 @@ import (
 
 type CPUSubsystem struct {
 	path string
+	res  *ResourceConfig
 }
 
-func NewCPUSubsystem() *CPUSubsystem {
+func NewCPUSubsystem(res *ResourceConfig) *CPUSubsystem {
 	s := &CPUSubsystem{}
 	s.path = findSubsystemMountpoint(s.Name())
+	s.res = res
 	return s
 }
 
@@ -23,13 +25,13 @@ func (t *CPUSubsystem) Name() string {
 }
 
 // Set 设置某个cgroup在这个Subsystem中的资源限制
-func (t *CPUSubsystem) Set(cgroupPath string, res *ResourceConfig) (err error) {
+func (t *CPUSubsystem) Set(cgroupPath string) (err error) {
 	cpath, err := getCgroupPath(t.path, cgroupPath, true)
 	if err != nil {
 		return err
 	}
-	if res.CPUShare != "" {
-		err = ioutil.WriteFile(path.Join(cpath, "cpu.shares"), []byte(res.CPUShare), 0644)
+	if t.res.CPUShare != "" {
+		err = ioutil.WriteFile(path.Join(cpath, "cpu.shares"), []byte(t.res.CPUShare), 0644)
 		if err != nil {
 			log.Error(err.Error())
 			return err

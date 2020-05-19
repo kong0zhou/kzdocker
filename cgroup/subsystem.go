@@ -13,7 +13,7 @@ type Subsystem interface {
 	// 返回subsystem的名字
 	Name() string
 	// 设置某个cgroup在这个Subsystem中的资源限制
-	Set(path string, res *ResourceConfig) error
+	Set(path string) error
 	// 将进程添加到某个cgroup中
 	Apply(path string, pid int) error
 	// 移除某个cgroup

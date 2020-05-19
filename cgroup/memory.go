@@ -10,11 +10,13 @@ import (
 
 type MemorySubsystem struct {
 	path string
+	res  *ResourceConfig
 }
 
-func NewMemorySubsystem() *MemorySubsystem {
+func NewMemorySubsystem(res *ResourceConfig) *MemorySubsystem {
 	s := &MemorySubsystem{}
 	s.path = findSubsystemMountpoint(s.Name())
+	s.res = res
 	return s
 }
 
@@ -23,13 +25,13 @@ func (t *MemorySubsystem) Name() string {
 }
 
 // Set 设置某个cgroup在这个Subsystem中的资源限制
-func (t *MemorySubsystem) Set(cgroupPath string, res *ResourceConfig) (err error) {
+func (t *MemorySubsystem) Set(cgroupPath string) (err error) {
 	cpath, err := getCgroupPath(t.path, cgroupPath, true)
 	if err != nil {
 		return err
 	}
-	if res.MemoryLimit != "" {
-		err = ioutil.WriteFile(path.Join(cpath, "memory.limit_in_bytes"), []byte(res.MemoryLimit), 0644)
+	if t.res.MemoryLimit != "" {
+		err = ioutil.WriteFile(path.Join(cpath, "memory.limit_in_bytes"), []byte(t.res.MemoryLimit), 0644)
 		if err != nil {
 			log.Error(err.Error())
 			return err

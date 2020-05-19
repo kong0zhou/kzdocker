@@ -49,7 +49,7 @@ func setUpMount() {
 		// return
 	}
 	fmt.Println("setUpMount() Current location is ", pwd)
-	err = pivotRoot(filepath.Join(pwd, "alpine"))
+	err = pivotRoot(filepath.Join(pwd, "root/mnt"))
 	if err != nil {
 		panic("setUpMount()  error " + err.Error())
 		// return

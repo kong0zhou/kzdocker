@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"kzdocker/base"
 	"kzdocker/cgroup"
 	"kzdocker/container"
 	"kzdocker/log"
+	"path/filepath"
 
 	"github.com/urfave/cli/v2"
 )
@@ -53,16 +55,21 @@ var runCommand = &cli.Command{
 }
 
 func run(tty bool, command []string, res *cgroup.ResourceConfig) {
-	parent := container.NewParentProcess(tty, command)
+	parent, err := container.NewParentProcess(tty, command)
+	if err != nil {
+		return
+	}
 	if err := parent.Start(); err != nil {
 		log.Error(err.Error())
+		return
 	}
 	cgroupManager := cgroup.NewCGroupManager("kzdocker-cgroup", res)
 	defer cgroupManager.Destroy()
 	cgroupManager.Set()
 	cgroupManager.Apply(parent.Process.Pid)
 	parent.Wait()
-	// cgroupManager.Destroy()
-	// os.Exit(-1)
+	mntURL := filepath.Join(base.BasePath, `root/mnt`)
+	rootURL := filepath.Join(base.BasePath, `root`)
+	container.DeleteWorkSpace(rootURL, mntURL)
 	return
 }
